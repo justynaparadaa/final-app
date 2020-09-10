@@ -1,0 +1,28 @@
+package pl.jparada.app.finalapp.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import pl.jparada.app.finalapp.model.Participant;
+import pl.jparada.app.finalapp.model.SinglePayment;
+import pl.jparada.app.finalapp.repository.SinglePaymentRepository;
+
+import java.util.List;
+
+@Service
+public class SinglePaymentService {
+
+    @Autowired
+    private SinglePaymentRepository singlePaymentRepository;
+
+    public void saveSinglePayment(SinglePayment singlePayment) {
+        singlePaymentRepository.save(singlePayment);
+    }
+
+    public double countPartPayment(Double paidAmount, List<Participant> participantList) {
+        return paidAmount / participantList.size();
+    }
+
+    public SinglePayment findByDescriptionAndAmountPaid(String description, Double amountPaid) {
+        return singlePaymentRepository.findByPaymentDescriptionAndPaidAmount(description, amountPaid);
+    }
+}
