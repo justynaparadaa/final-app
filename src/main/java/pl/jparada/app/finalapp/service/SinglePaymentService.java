@@ -23,6 +23,6 @@ public class SinglePaymentService {
     }
 
     public SinglePayment findByDescriptionAndAmountPaid(String description, Double amountPaid) {
-        return singlePaymentRepository.findByPaymentDescriptionAndPaidAmount(description, amountPaid);
+        return singlePaymentRepository.findByPaymentDescriptionAndExpense(description, amountPaid);
     }
 }
