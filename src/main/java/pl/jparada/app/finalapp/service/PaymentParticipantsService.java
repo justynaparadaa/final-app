@@ -5,12 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.jparada.app.finalapp.model.PaymentParticipants;
 import pl.jparada.app.finalapp.repository.PaymentParticipantsRepository;
 
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Service
 public class PaymentParticipantsService {
 

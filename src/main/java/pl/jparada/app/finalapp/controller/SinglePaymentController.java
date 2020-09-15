@@ -3,10 +3,7 @@ package pl.jparada.app.finalapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.SinglePayment;
@@ -16,7 +13,7 @@ import pl.jparada.app.finalapp.service.SinglePaymentService;
 
 //import pl.jparada.app.finalapp.service.EventParticipantsService;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/v1/events")
 public class SinglePaymentController {
 

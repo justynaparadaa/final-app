@@ -1,22 +1,22 @@
 package pl.jparada.app.finalapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.SinglePayment;
 import pl.jparada.app.finalapp.repository.EventRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-
 @Service
 public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    public EventService(@Qualifier("event") EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
 
     public void saveEvent(Event event) {
         eventRepository.save(event);
