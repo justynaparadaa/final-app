@@ -31,7 +31,6 @@ public class Event implements Serializable {
 
     private double totalExpense;
 
-
     public Event(String nameEvent) {
         this.nameEvent = nameEvent;
     }

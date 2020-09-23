@@ -25,15 +25,11 @@ public class SinglePayment implements Serializable {
 
     private Double expense;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private Participant owner;
 
-//    @OneToOne
-//    private PaymentParticipants paymentParticipants;
-
-
-    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name ="participant_list_id", referencedColumnName = "single_payment_id")
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Participant> participantList;
 
 }

@@ -22,7 +22,8 @@ public class SinglePaymentService {
         return paidAmount / participantList.size();
     }
 
-    public SinglePayment findByDescriptionAndAmountPaid(String description, Double amountPaid) {
-        return singlePaymentRepository.findByPaymentDescriptionAndExpense(description, amountPaid);
+    public SinglePayment findByDescriptionAndExpense(String description, Double expense) {
+        return singlePaymentRepository.findByPaymentDescriptionAndExpense(description, expense);
     }
+
 }

@@ -15,7 +15,6 @@ import pl.jparada.app.finalapp.service.ParticipantService;
 import pl.jparada.app.finalapp.service.SinglePaymentService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 //import pl.jparada.app.finalapp.service.EventParticipantsService;
@@ -39,18 +38,18 @@ public class SinglePaymentController {
         Event event = eventService.getEventById(eventId);
         Participant owner = participantService.getParticipantById(ownerId);
         Double expense = singlePayment.getExpense();
-        List<Participant> eventParticipants = event.getParticipants();
-        List<Participant> paymentParticipants = new ArrayList<>();
-
-        paymentParticipants.addAll(eventParticipants);
+        List<Participant> paymentParticipants = new ArrayList<>(event.getParticipants());
 
         singlePayment.setOwner(owner);
         singlePayment.setParticipantList(paymentParticipants);
         singlePaymentService.saveSinglePayment(singlePayment);
-        SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndAmountPaid(singlePayment.getPaymentDescription(), expense);
+        SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndExpense(singlePayment.getPaymentDescription(), expense);
 
         eventService.addSinglePayment(event, singlePaymentFromDb);
         eventService.addExpenseToTotal(event, expense);
+
+        participantService.addAmountPaid(ownerId, expense);
+        paymentParticipants.forEach(participant -> participantService.addAmountDue(participant.getId(), expense/paymentParticipants.size()));
 
         return ResponseEntity.ok().body(singlePaymentFromDb);
     }

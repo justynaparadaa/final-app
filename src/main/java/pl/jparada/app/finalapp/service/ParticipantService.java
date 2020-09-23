@@ -30,11 +30,11 @@ public class ParticipantService {
         saveParticipant(participantById);
     }
 
-    public void addAmountDue(Long ownerId, Double partPayment) {
-        Participant participantById = getParticipantById(ownerId);
-        double initialPaidAmount = participantById.getTotalAmountDue();
-        double totalPaidAmount = initialPaidAmount + partPayment;
-        participantById.setTotalAmountPaid(totalPaidAmount);
+    public void addAmountDue(Long participantId, Double partPayment) {
+        Participant participantById = getParticipantById(participantId);
+        double initialDueAmount = participantById.getTotalAmountDue();
+        double totalPaidAmount = initialDueAmount + partPayment;
+        participantById.setTotalAmountDue(totalPaidAmount);
         saveParticipant(participantById);
 
     }
