@@ -21,8 +21,8 @@ public class ParticipantService {
     public Participant getParticipantById(Long id) {
         return participantRepository.findById(id).orElse(new Participant());
     }
-    
-    public void addAmountPaid(Long ownerId, Double paidAmount){
+
+    public void addAmountPaid(Long ownerId, Double paidAmount) {
         Participant participantById = getParticipantById(ownerId);
         double initialPaidAmount = participantById.getTotalAmountPaid();
         double totalPaidAmount = initialPaidAmount + paidAmount;

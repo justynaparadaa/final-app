@@ -8,4 +8,5 @@ import pl.jparada.app.finalapp.model.SinglePayment;
 public interface SinglePaymentRepository extends CrudRepository<SinglePayment, Long> {
 
     SinglePayment findByPaymentDescriptionAndExpense(String paymentDescription, Double paidAmount);
+
 }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -26,8 +28,12 @@ public class SinglePayment implements Serializable {
     @ManyToOne
     private Participant owner;
 
-    @OneToOne
-    private PaymentParticipants paymentParticipants;
+//    @OneToOne
+//    private PaymentParticipants paymentParticipants;
 
+
+    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="participant_list_id", referencedColumnName = "single_payment_id")
+    private List<Participant> participantList;
 
 }

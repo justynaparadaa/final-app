@@ -36,7 +36,6 @@ public class Event implements Serializable {
         this.nameEvent = nameEvent;
     }
 
-
     public Event(String nameEvent, List<Participant> participants) {
         this.nameEvent = nameEvent;
         this.participants = participants;

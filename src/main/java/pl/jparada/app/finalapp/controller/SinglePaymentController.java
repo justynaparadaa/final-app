@@ -14,6 +14,10 @@ import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
 import pl.jparada.app.finalapp.service.SinglePaymentService;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 //import pl.jparada.app.finalapp.service.EventParticipantsService;
 
 @Controller
@@ -32,16 +36,21 @@ public class SinglePaymentController {
     @PutMapping("/{e_id}/participants/{o_id}/payments")
     public ResponseEntity<SinglePayment> addSinglePayment(@RequestBody SinglePayment singlePayment, @PathVariable(value = "e_id") Long eventId, @PathVariable(value = "o_id") Long ownerId){
 
-        Event eventById = eventService.getEventById(eventId);
-        Participant ownerById = participantService.getParticipantById(ownerId);
+        Event event = eventService.getEventById(eventId);
+        Participant owner = participantService.getParticipantById(ownerId);
         Double expense = singlePayment.getExpense();
+        List<Participant> eventParticipants = event.getParticipants();
+        List<Participant> paymentParticipants = new ArrayList<>();
 
-        singlePayment.setOwner(ownerById);
+        paymentParticipants.addAll(eventParticipants);
+
+        singlePayment.setOwner(owner);
+        singlePayment.setParticipantList(paymentParticipants);
         singlePaymentService.saveSinglePayment(singlePayment);
         SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndAmountPaid(singlePayment.getPaymentDescription(), expense);
 
-        eventService.addSinglePayment(eventById, singlePaymentFromDb);
-        eventService.addExpenseToTotal(eventById, expense);
+        eventService.addSinglePayment(event, singlePaymentFromDb);
+        eventService.addExpenseToTotal(event, expense);
 
         return ResponseEntity.ok().body(singlePaymentFromDb);
     }
