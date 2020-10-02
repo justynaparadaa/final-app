@@ -39,4 +39,6 @@ public class Event implements Serializable {
         this.nameEvent = nameEvent;
         this.participants = participants;
     }
+
+
 }

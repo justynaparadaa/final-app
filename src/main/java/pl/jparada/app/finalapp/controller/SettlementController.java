@@ -4,19 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
+import pl.jparada.app.finalapp.model.Settlement;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
+import pl.jparada.app.finalapp.service.SettlementService;
 
-//import pl.jparada.app.finalapp.service.EventParticipantsService;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/v1/events")
-public class ParticipantController {
+public class SettlementController {
+
+    @Autowired
+    private SettlementService settlementService;
 
     @Autowired
     private EventService eventService;
@@ -24,15 +28,12 @@ public class ParticipantController {
     @Autowired
     private ParticipantService participantService;
 
-    @PutMapping("/{id}/participants")
-    public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant, @PathVariable(value = "id") Long eventId){
+    @PostMapping("{id}/settlement")
+    public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId){
+        Event event = eventService.getEventById(eventId);
+        List<Participant> participants = event.getParticipants();
 
-        Event eventById = eventService.getEventById(eventId);
-        participantService.saveParticipant(participant);
-        eventService.addEventParticipant(eventById, participant);
-
-        return ResponseEntity.ok().body(participant);
+        List<Settlement> settlements = settlementService.makeSettlement(participants);
+        return ResponseEntity.ok().body(settlements);
     }
-
-
 }

@@ -17,8 +17,6 @@ import pl.jparada.app.finalapp.service.SinglePaymentService;
 import java.util.ArrayList;
 import java.util.List;
 
-//import pl.jparada.app.finalapp.service.EventParticipantsService;
-
 @Controller
 @RequestMapping(value = "/api/v1/events")
 public class SinglePaymentController {
@@ -55,7 +53,4 @@ public class SinglePaymentController {
     }
 
 
-//    1) Payment zapisany w bazie z ownerem bez uczestników
-//    2) Payment dopisany do eventu
-//    3) Total koszt zapisany do Eventu
 }

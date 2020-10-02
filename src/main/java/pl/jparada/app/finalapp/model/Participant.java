@@ -24,8 +24,12 @@ public class Participant implements Serializable {
 
     private double totalAmountDue;
 
+    @Transient
+    private double balance;
+
     public Participant(String nameParticipant) {
         this.nameParticipant = nameParticipant;
+        balance = totalAmountPaid - totalAmountDue;
     }
 
 }

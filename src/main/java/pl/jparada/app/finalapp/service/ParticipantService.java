@@ -1,12 +1,8 @@
 package pl.jparada.app.finalapp.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.repository.ParticipantRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ParticipantService {

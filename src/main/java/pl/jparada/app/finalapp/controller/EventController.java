@@ -4,17 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.jparada.app.finalapp.model.Event;
-import pl.jparada.app.finalapp.model.Participant;
-
-import pl.jparada.app.finalapp.model.SinglePayment;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
-
 import pl.jparada.app.finalapp.service.SinglePaymentService;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
