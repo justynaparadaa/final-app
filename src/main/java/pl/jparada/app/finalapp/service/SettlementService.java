@@ -16,9 +16,9 @@ public class SettlementService {
     @Autowired
     private SettlementRepository settlementRepository;
 
-    public List<Settlement> makeSettlement(List<Participant> participants) {
+    public List<Settlement> makeAndSaveSettlement(List<Participant> participants) {
 
-        ArrayList<Settlement> settlements = new ArrayList<>();
+        List<Settlement> settlements = new ArrayList<>();
 
         participants.forEach(Participant::countBalance);
 
@@ -30,26 +30,26 @@ public class SettlementService {
             Participant firstParticipant = sortedParticipantsByBalance.get(0);
             Participant lastParticipant = sortedParticipantsByBalance.get(sortedParticipantsByBalance.size() - 1);
 
-            double cash = 0;
+            double cashToReturn = 0;
 
             double absFirstBalance = Math.abs(firstParticipant.getBalance());
             double absLastBalance = Math.abs(lastParticipant.getBalance());
 
             if (absFirstBalance < absLastBalance) {
-                cash = absFirstBalance;
+                cashToReturn = absFirstBalance;
                 lastParticipant.setBalance(lastParticipant.getBalance() - absFirstBalance);
                 sortedParticipantsByBalance.remove(firstParticipant);
             } else if (absFirstBalance > absLastBalance){
-                cash = absLastBalance;
+                cashToReturn = absLastBalance;
                 firstParticipant.setBalance(firstParticipant.getBalance() + absLastBalance);
                 sortedParticipantsByBalance.remove(lastParticipant);
             } else {
-                cash = absFirstBalance;
+                cashToReturn = absFirstBalance;
                 sortedParticipantsByBalance.remove(firstParticipant);
                 sortedParticipantsByBalance.remove(lastParticipant);
             }
 
-            Settlement settlement = new Settlement(firstParticipant, lastParticipant, cash);
+            Settlement settlement = new Settlement(firstParticipant, lastParticipant, cashToReturn);
             settlementRepository.save(settlement);
         }
 
