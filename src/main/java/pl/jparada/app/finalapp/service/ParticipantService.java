@@ -1,8 +1,12 @@
 package pl.jparada.app.finalapp.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.repository.ParticipantRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ParticipantService {
@@ -33,5 +37,13 @@ public class ParticipantService {
         participantById.setTotalAmountDue(totalPaidAmount);
         saveParticipant(participantById);
 
+    }
+
+    public List<Participant> getAllParticipants() {
+        List<Participant> participants = new ArrayList<>();
+        for (Participant participant : participantRepository.findAll()) {
+            participants.add(participant);
+        }
+        return participants;
     }
 }

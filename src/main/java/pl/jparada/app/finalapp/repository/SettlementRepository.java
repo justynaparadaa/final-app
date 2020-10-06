@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.jparada.app.finalapp.model.Settlement;
 
 @Repository
-public interface SettlementRepository extends CrudRepository<Long, Settlement> {
+public interface SettlementRepository extends CrudRepository<Settlement, Long> {
 }

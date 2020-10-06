@@ -28,4 +28,11 @@ public class Settlement implements Serializable {
     @OneToOne
     private Participant debtor;
 
+    private double amount;
+
+    public Settlement(Participant lender, Participant debtor, double amount) {
+        this.lender = lender;
+        this.debtor = debtor;
+        this.amount = amount;
+    }
 }

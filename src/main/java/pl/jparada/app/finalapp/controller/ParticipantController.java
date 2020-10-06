@@ -31,6 +31,7 @@ public class ParticipantController {
         participantService.saveParticipant(participant);
         eventService.addEventParticipant(eventById, participant);
 
+
         return ResponseEntity.ok().body(participant);
     }
 

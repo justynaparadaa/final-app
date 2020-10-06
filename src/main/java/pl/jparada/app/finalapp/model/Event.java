@@ -29,6 +29,10 @@ public class Event implements Serializable {
     @JoinColumn(name = "event_id")
     private List<SinglePayment> singlePayment;
 
+    @OneToMany
+    @JoinColumn(name = "event_id")
+    private List<Settlement> settlement;
+
     private double totalExpense;
 
     public Event(String nameEvent) {

@@ -32,7 +32,6 @@ public class SettlementController {
     public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId){
         Event event = eventService.getEventById(eventId);
         List<Participant> participants = event.getParticipants();
-
         List<Settlement> settlements = settlementService.makeSettlement(participants);
         return ResponseEntity.ok().body(settlements);
     }
