@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
@@ -27,13 +26,15 @@ public class ParticipantController {
     @PutMapping("/{id}/participants")
     public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant, @PathVariable(value = "id") Long eventId){
 
-        Event eventById = eventService.getEventById(eventId);
-        participantService.saveParticipant(participant);
-        eventService.addEventParticipant(eventById, participant);
+        Participant participantFrDb = participant;
 
+        if(!eventService.existParticipant(eventId, participant)) {
+            eventService.addParticipant(eventId, participant);
+            participantService.saveParticipant(participant);
+        } else {
+            participantFrDb = eventService.getParticipant(eventId, participant);
+        }
 
-        return ResponseEntity.ok().body(participant);
+        return ResponseEntity.ok().body(participantFrDb);
     }
-
-
 }

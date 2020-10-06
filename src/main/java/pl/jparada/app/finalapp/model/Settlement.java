@@ -20,17 +20,18 @@ public class Settlement implements Serializable {
     private Long id;
 
     @OneToOne
+    private Participant debtor;
+
+    @OneToOne
     private Participant lender;
 
 //    @Transient
 //    private Map<Long, Double> debtorMap;
 
-    @OneToOne
-    private Participant debtor;
 
     private double amount;
 
-    public Settlement(Participant lender, Participant debtor, double amount) {
+    public Settlement(Participant debtor, Participant lender, double amount) {
         this.lender = lender;
         this.debtor = debtor;
         this.amount = amount;

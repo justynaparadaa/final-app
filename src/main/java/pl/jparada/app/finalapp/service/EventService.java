@@ -7,8 +7,6 @@ import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.SinglePayment;
 import pl.jparada.app.finalapp.repository.EventRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -32,23 +30,14 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
-    public void addEventParticipant(Event eventById, Participant participant) {
-
-        if (eventById.getParticipants()
-                .stream()
-                .noneMatch(e -> e.getNameParticipant().equals(participant.getNameParticipant())))
-            eventById.getParticipants().add(participant);
-
-        saveEvent(eventById);
+    public void addParticipant(Long eventById, Participant participant) {
+        Event event = eventRepository.findById(eventById).orElse(new Event());
+        event.getParticipants().add(participant);
+        eventRepository.save(event);
     }
 
     public void addSinglePayment(Event eventById, SinglePayment singlePaymentFromDb) {
-
-        if(eventById.getSinglePayment()
-                .stream()
-                .noneMatch(e -> e.getPaymentDescription().equals(singlePaymentFromDb.getPaymentDescription())))
         eventById.getSinglePayment().add(singlePaymentFromDb);
-
         saveEvent(eventById);
     }
 
@@ -56,5 +45,21 @@ public class EventService {
         double totalExpense = eventById.getTotalExpense() + expense;
         eventById.setTotalExpense(totalExpense);
         saveEvent(eventById);
+    }
+
+    public boolean existParticipant(Long eventId, Participant participant) {
+        Event event = eventRepository.findById(eventId).orElse(new Event());
+        return event.getParticipants()
+                .stream()
+                .anyMatch(p -> p.getNameParticipant().equals(participant.getNameParticipant()));
+    }
+
+    public Participant getParticipant(Long eventId, Participant participant) {
+        Event event = eventRepository.findById(eventId).orElse(new Event());
+        Optional<Participant> eventParticipant = event.getParticipants()
+                .stream()
+                .filter(p -> p.getNameParticipant().equals(participant.getNameParticipant()))
+                .findFirst();
+        return eventParticipant.orElse(new Participant());
     }
 }

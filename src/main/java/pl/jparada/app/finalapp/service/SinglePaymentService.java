@@ -14,8 +14,8 @@ public class SinglePaymentService {
     @Autowired
     private SinglePaymentRepository singlePaymentRepository;
 
-    public void saveSinglePayment(SinglePayment singlePayment) {
-        singlePaymentRepository.save(singlePayment);
+    public SinglePayment saveAndFlushSinglePayment(SinglePayment singlePayment) {
+        return singlePaymentRepository.saveAndFlush(singlePayment);
     }
 
     public double countPartPayment(Double paidAmount, List<Participant> participantList) {

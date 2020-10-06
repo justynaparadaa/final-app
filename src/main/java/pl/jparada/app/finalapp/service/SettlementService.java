@@ -22,13 +22,15 @@ public class SettlementService {
 
         participants.forEach(Participant::countBalance);
 
-        List<Participant> sortedParticipantsByBalance = participants.stream()
-                .sorted()
-                .collect(Collectors.toList());
+        List<Participant> participantsToSettlement = new ArrayList<>(participants);
 
-        while (!sortedParticipantsByBalance.isEmpty()) {
-            Participant firstParticipant = sortedParticipantsByBalance.get(0);
-            Participant lastParticipant = sortedParticipantsByBalance.get(sortedParticipantsByBalance.size() - 1);
+        while (!participantsToSettlement.isEmpty()) {
+            List<Participant> sortedParticipantsToSettlement = participantsToSettlement
+                    .stream()
+                    .sorted()
+                    .collect(Collectors.toList());
+            Participant firstParticipant = sortedParticipantsToSettlement.get(0);
+            Participant lastParticipant = sortedParticipantsToSettlement.get(participantsToSettlement.size() - 1);
 
             double cashToReturn = 0;
 
@@ -38,23 +40,29 @@ public class SettlementService {
             if (absFirstBalance < absLastBalance) {
                 cashToReturn = absFirstBalance;
                 lastParticipant.setBalance(lastParticipant.getBalance() - absFirstBalance);
-                sortedParticipantsByBalance.remove(firstParticipant);
-            } else if (absFirstBalance > absLastBalance){
+                participantsToSettlement.remove(firstParticipant);
+            } else if (absFirstBalance > absLastBalance) {
                 cashToReturn = absLastBalance;
                 firstParticipant.setBalance(firstParticipant.getBalance() + absLastBalance);
-                sortedParticipantsByBalance.remove(lastParticipant);
+                participantsToSettlement.remove(lastParticipant);
             } else {
                 cashToReturn = absFirstBalance;
-                sortedParticipantsByBalance.remove(firstParticipant);
-                sortedParticipantsByBalance.remove(lastParticipant);
+                participantsToSettlement.remove(firstParticipant);
+                participantsToSettlement.remove(lastParticipant);
             }
 
             Settlement settlement = new Settlement(firstParticipant, lastParticipant, cashToReturn);
+            settlements.add(settlement);
             settlementRepository.save(settlement);
         }
 
-        settlementRepository.findAll().forEach(settlements::add);
+        return getAll()
+                .stream()
+                .filter(settlements::contains)
+                .collect(Collectors.toList());
+    }
 
-        return settlements;
+    private List<Settlement> getAll() {
+        return new ArrayList<>(settlementRepository.findAll());
     }
 }

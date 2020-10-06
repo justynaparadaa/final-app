@@ -40,8 +40,8 @@ public class SinglePaymentController {
 
         singlePayment.setOwner(owner);
         singlePayment.setParticipantList(paymentParticipants);
-        singlePaymentService.saveSinglePayment(singlePayment);
-        SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndExpense(singlePayment.getPaymentDescription(), expense);
+        SinglePayment singlePaymentFromDb = singlePaymentService.saveAndFlushSinglePayment(singlePayment);
+//        SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndExpense(singlePayment.getPaymentDescription(), expense);
 
         eventService.addSinglePayment(event, singlePaymentFromDb);
         eventService.addExpenseToTotal(event, expense);
