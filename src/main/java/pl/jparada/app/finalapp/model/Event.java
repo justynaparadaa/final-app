@@ -21,15 +21,15 @@ public class Event implements Serializable {
 
     private String nameEvent;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     private List<Participant> participants;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
-    private List<SinglePayment> singlePayment;
+    private List<Payment> payment;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
     private List<Settlement> settlement;
 

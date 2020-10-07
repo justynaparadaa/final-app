@@ -11,7 +11,6 @@ import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
 
-//import pl.jparada.app.finalapp.service.EventParticipantsService;
 
 @Controller
 @RequestMapping(value = "/api/v1/events")
@@ -26,15 +25,13 @@ public class ParticipantController {
     @PutMapping("/{id}/participants")
     public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant, @PathVariable(value = "id") Long eventId){
 
-        Participant participantFrDb = participant;
-
         if(!eventService.existParticipant(eventId, participant)) {
-            eventService.addParticipant(eventId, participant);
             participantService.saveParticipant(participant);
+            eventService.addParticipant(eventId, participant);
         } else {
-            participantFrDb = eventService.getParticipant(eventId, participant);
+            participant = eventService.getParticipant(eventId, participant);
         }
 
-        return ResponseEntity.ok().body(participantFrDb);
+        return ResponseEntity.ok().body(participant);
     }
 }

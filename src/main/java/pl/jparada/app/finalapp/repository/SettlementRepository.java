@@ -6,4 +6,5 @@ import pl.jparada.app.finalapp.model.Settlement;
 
 @Repository
 public interface SettlementRepository extends JpaRepository<Settlement, Long> {
+
 }

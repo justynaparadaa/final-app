@@ -56,6 +56,8 @@ public class SettlementService {
             settlementRepository.save(settlement);
         }
 
+        participants.forEach(Participant::countBalance);
+
         return getAll()
                 .stream()
                 .filter(settlements::contains)
@@ -64,5 +66,10 @@ public class SettlementService {
 
     private List<Settlement> getAll() {
         return new ArrayList<>(settlementRepository.findAll());
+    }
+
+
+    public void deletePreviousSettlement(List<Settlement> eventSettlements) {
+        eventSettlements.forEach(e -> settlementRepository.deleteById(e.getId()));
     }
 }

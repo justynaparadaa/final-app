@@ -1,6 +1,5 @@
 package pl.jparada.app.finalapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +26,6 @@ public class Participant implements Serializable, Comparable<Participant>{
     private double totalAmountDue;
 
     @Transient
-    @JsonIgnore
     private double balance;
 
     public Participant(String nameParticipant) {

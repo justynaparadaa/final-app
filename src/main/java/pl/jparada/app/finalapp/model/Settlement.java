@@ -19,10 +19,10 @@ public class Settlement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Participant debtor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Participant lender;
 
 //    @Transient

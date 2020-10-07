@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
-import pl.jparada.app.finalapp.model.SinglePayment;
+import pl.jparada.app.finalapp.model.Payment;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
-import pl.jparada.app.finalapp.service.SinglePaymentService;
+import pl.jparada.app.finalapp.service.PaymentService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/v1/events")
-public class SinglePaymentController {
+public class PaymentController {
 
     @Autowired
     private EventService eventService;
@@ -28,28 +28,31 @@ public class SinglePaymentController {
     private ParticipantService participantService;
 
     @Autowired
-    private SinglePaymentService singlePaymentService;
+    private PaymentService paymentService;
 
     @PutMapping("/{e_id}/participants/{o_id}/payments")
-    public ResponseEntity<SinglePayment> addSinglePayment(@RequestBody SinglePayment singlePayment, @PathVariable(value = "e_id") Long eventId, @PathVariable(value = "o_id") Long ownerId){
+    public ResponseEntity<Payment> addSinglePayment(@RequestBody Payment payment, @PathVariable(value = "e_id") Long eventId, @PathVariable(value = "o_id") Long ownerId) {
 
         Event event = eventService.getEventById(eventId);
         Participant owner = participantService.getParticipantById(ownerId);
-        Double expense = singlePayment.getExpense();
+        Double expense = payment.getExpense();
         List<Participant> paymentParticipants = new ArrayList<>(event.getParticipants());
 
-        singlePayment.setOwner(owner);
-        singlePayment.setParticipantList(paymentParticipants);
-        SinglePayment singlePaymentFromDb = singlePaymentService.saveAndFlushSinglePayment(singlePayment);
-//        SinglePayment singlePaymentFromDb = singlePaymentService.findByDescriptionAndExpense(singlePayment.getPaymentDescription(), expense);
+        if (eventService.existParticipant(eventId, owner)) {
+            payment.setOwner(owner);
+            payment.setParticipantList(paymentParticipants);
+            paymentService.savePayment(payment);
 
-        eventService.addSinglePayment(event, singlePaymentFromDb);
-        eventService.addExpenseToTotal(event, expense);
+            eventService.addSinglePayment(eventId, payment);
+            eventService.addExpenseToTotal(eventId, expense);
 
-        participantService.addAmountPaid(ownerId, expense);
-        paymentParticipants.forEach(participant -> participantService.addAmountDue(participant.getId(), expense/paymentParticipants.size()));
+            participantService.addAmountPaid(ownerId, expense);
+            paymentParticipants.forEach(participant -> participantService.addAmountDue(participant.getId(), expense / paymentParticipants.size()));
+        } else {
+            return ResponseEntity.ok().body(new Payment());
+        }
 
-        return ResponseEntity.ok().body(singlePaymentFromDb);
+        return ResponseEntity.ok().body(payment);
     }
 
 

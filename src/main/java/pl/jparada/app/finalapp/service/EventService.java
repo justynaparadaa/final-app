@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
-import pl.jparada.app.finalapp.model.SinglePayment;
+import pl.jparada.app.finalapp.model.Payment;
 import pl.jparada.app.finalapp.repository.EventRepository;
 
 import java.util.Optional;
@@ -30,36 +30,39 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
-    public void addParticipant(Long eventById, Participant participant) {
-        Event event = eventRepository.findById(eventById).orElse(new Event());
+    public void addParticipant(Long id, Participant participant) {
+        Event event = getEventById(id);
         event.getParticipants().add(participant);
         eventRepository.save(event);
     }
 
-    public void addSinglePayment(Event eventById, SinglePayment singlePaymentFromDb) {
-        eventById.getSinglePayment().add(singlePaymentFromDb);
-        saveEvent(eventById);
+    public void addSinglePayment(Long id, Payment paymentFromDb) {
+        Event event = getEventById(id);
+        event.getPayment().add(paymentFromDb);
+        saveEvent(event);
     }
 
-    public void addExpenseToTotal(Event eventById, Double expense) {
-        double totalExpense = eventById.getTotalExpense() + expense;
-        eventById.setTotalExpense(totalExpense);
-        saveEvent(eventById);
+    public void addExpenseToTotal(Long id, Double expense) {
+        Event event = getEventById(id);;
+        double totalExpense = event.getTotalExpense() + expense;
+        event.setTotalExpense(totalExpense);
+        saveEvent(event);
     }
 
-    public boolean existParticipant(Long eventId, Participant participant) {
-        Event event = eventRepository.findById(eventId).orElse(new Event());
+    public boolean existParticipant(Long id, Participant participant) {
+        Event event = getEventById(id);
         return event.getParticipants()
                 .stream()
                 .anyMatch(p -> p.getNameParticipant().equals(participant.getNameParticipant()));
     }
 
-    public Participant getParticipant(Long eventId, Participant participant) {
-        Event event = eventRepository.findById(eventId).orElse(new Event());
+    public Participant getParticipant(Long id, Participant participant) {
+        Event event = getEventById(id);
         Optional<Participant> eventParticipant = event.getParticipants()
                 .stream()
                 .filter(p -> p.getNameParticipant().equals(participant.getNameParticipant()))
                 .findFirst();
         return eventParticipant.orElse(new Participant());
     }
+
 }

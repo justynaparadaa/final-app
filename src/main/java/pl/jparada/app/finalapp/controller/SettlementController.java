@@ -29,12 +29,21 @@ public class SettlementController {
     private ParticipantService participantService;
 
     @PostMapping("{id}/settlement")
-    public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId){
+    public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId) {
+
         Event event = eventService.getEventById(eventId);
+
+        List<Settlement> eventSettlements = event.getSettlement();
+        if (!eventSettlements.isEmpty()) {
+            settlementService.deletePreviousSettlement(eventSettlements);
+        }
+
         List<Participant> participants = event.getParticipants();
+
         List<Settlement> settlements = settlementService.makeAndSaveSettlement(participants);
         event.setSettlement(settlements);
         eventService.saveEvent(event);
+
         return ResponseEntity.ok().body(settlements);
     }
 }

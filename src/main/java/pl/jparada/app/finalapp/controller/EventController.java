@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
-import pl.jparada.app.finalapp.service.SinglePaymentService;
+import pl.jparada.app.finalapp.service.PaymentService;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
@@ -19,7 +19,7 @@ public class EventController {
     private ParticipantService participantService;
 
     @Autowired
-    private SinglePaymentService singlePaymentService;
+    private PaymentService paymentService;
 
     @PostMapping()
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
@@ -30,8 +30,8 @@ public class EventController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable(value = "id") Long id) {
-        Event eventById = eventService.getEventById(id);
-        return ResponseEntity.ok().body(eventById);
+        Event event = eventService.getEventById(id);
+        return ResponseEntity.ok().body(event);
     }
 
 }
