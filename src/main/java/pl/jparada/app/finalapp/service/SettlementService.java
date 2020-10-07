@@ -18,11 +18,11 @@ public class SettlementService {
 
     public List<Settlement> makeAndSaveSettlement(List<Participant> participants) {
 
-        List<Settlement> settlements = new ArrayList<>();
 
         participants.forEach(Participant::countBalance);
 
         List<Participant> participantsToSettlement = new ArrayList<>(participants);
+        List<Settlement> settlements = new ArrayList<>();
 
         while (!participantsToSettlement.isEmpty()) {
             List<Participant> sortedParticipantsToSettlement = participantsToSettlement
@@ -67,7 +67,6 @@ public class SettlementService {
     private List<Settlement> getAll() {
         return new ArrayList<>(settlementRepository.findAll());
     }
-
 
     public void deletePreviousSettlement(List<Settlement> eventSettlements) {
         eventSettlements.forEach(e -> settlementRepository.deleteById(e.getId()));
