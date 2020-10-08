@@ -3,10 +3,7 @@ package pl.jparada.app.finalapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.Payment;
@@ -31,7 +28,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PutMapping("/{e_id}/participants/{o_id}/payments")
-    public ResponseEntity<Payment> addSinglePayment(@RequestBody Payment payment, @PathVariable(value = "e_id") Long eventId, @PathVariable(value = "o_id") Long ownerId) {
+    public ResponseEntity<Payment> addPayment(@RequestParam List<String> participantsId, @RequestBody Payment payment, @PathVariable(value = "e_id") Long eventId, @PathVariable(value = "o_id") Long ownerId) {
 
         Event event = eventService.getEventById(eventId);
         Participant owner = participantService.getParticipantById(ownerId);

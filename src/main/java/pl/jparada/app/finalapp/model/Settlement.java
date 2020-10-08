@@ -25,10 +25,6 @@ public class Settlement implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Participant lender;
 
-//    @Transient
-//    private Map<Long, Double> debtorMap;
-
-
     private double amount;
 
     public Settlement(Participant debtor, Participant lender, double amount) {

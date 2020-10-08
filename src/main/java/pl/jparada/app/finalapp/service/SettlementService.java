@@ -7,7 +7,9 @@ import pl.jparada.app.finalapp.model.Settlement;
 import pl.jparada.app.finalapp.repository.SettlementRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,45 +20,52 @@ public class SettlementService {
 
     public List<Settlement> makeAndSaveSettlement(List<Participant> participants) {
 
-
-        participants.forEach(Participant::countBalance);
-
-        List<Participant> participantsToSettlement = new ArrayList<>(participants);
+        Logger logger = Logger.getLogger("InfoLogger");
         List<Settlement> settlements = new ArrayList<>();
 
-        while (!participantsToSettlement.isEmpty()) {
-            List<Participant> sortedParticipantsToSettlement = participantsToSettlement
-                    .stream()
-                    .sorted()
+        try {
+            participants.forEach(Participant::countBalance);
+            List<Participant> participantsToSettlement = new ArrayList<>(participants);
+            List<Participant> filterParticipantsToSettlement = participantsToSettlement.stream()
+                    .filter(e -> e.getBalance() != 0)
                     .collect(Collectors.toList());
-            Participant firstParticipant = sortedParticipantsToSettlement.get(0);
-            Participant lastParticipant = sortedParticipantsToSettlement.get(participantsToSettlement.size() - 1);
 
-            double cashToReturn = 0;
+            Comparator<Participant> byBalance = Comparator.comparing(Participant::getBalance);
 
-            double absFirstBalance = Math.abs(firstParticipant.getBalance());
-            double absLastBalance = Math.abs(lastParticipant.getBalance());
+            while (!filterParticipantsToSettlement.isEmpty()) {
+                participantsToSettlement.sort(byBalance);
+                Participant firstParticipant = filterParticipantsToSettlement.get(0);
+                Participant lastParticipant = filterParticipantsToSettlement.get(filterParticipantsToSettlement.size() - 1);
 
-            if (absFirstBalance < absLastBalance) {
-                cashToReturn = absFirstBalance;
-                lastParticipant.setBalance(lastParticipant.getBalance() - absFirstBalance);
-                participantsToSettlement.remove(firstParticipant);
-            } else if (absFirstBalance > absLastBalance) {
-                cashToReturn = absLastBalance;
-                firstParticipant.setBalance(firstParticipant.getBalance() + absLastBalance);
-                participantsToSettlement.remove(lastParticipant);
-            } else {
-                cashToReturn = absFirstBalance;
-                participantsToSettlement.remove(firstParticipant);
-                participantsToSettlement.remove(lastParticipant);
+                double cashToReturn;
+
+                double absFirstBalance = Math.abs(firstParticipant.getBalance());
+                double absLastBalance = Math.abs(lastParticipant.getBalance());
+
+                if (absFirstBalance < absLastBalance) {
+                    cashToReturn = absFirstBalance;
+                    lastParticipant.setBalance(lastParticipant.getBalance() - absFirstBalance);
+                    filterParticipantsToSettlement.remove(firstParticipant);
+                } else if (absFirstBalance > absLastBalance) {
+                    cashToReturn = absLastBalance;
+                    firstParticipant.setBalance(firstParticipant.getBalance() + absLastBalance);
+                    filterParticipantsToSettlement.remove(lastParticipant);
+                } else {
+                    cashToReturn = absFirstBalance;
+                    filterParticipantsToSettlement.remove(firstParticipant);
+                    filterParticipantsToSettlement.remove(lastParticipant);
+                }
+
+                Settlement settlement = new Settlement(firstParticipant, lastParticipant, cashToReturn);
+                settlements.add(settlement);
+                settlementRepository.save(settlement);
             }
 
-            Settlement settlement = new Settlement(firstParticipant, lastParticipant, cashToReturn);
-            settlements.add(settlement);
-            settlementRepository.save(settlement);
-        }
+            participants.forEach(Participant::countBalance);
 
-        participants.forEach(Participant::countBalance);
+        } catch (NullPointerException e){
+            logger.info("Participants list is null");
+        }
 
         return getAll()
                 .stream()

@@ -21,8 +21,6 @@ public class EventService {
     }
 
     public Event getEventById(Long id) {
-        //Optional<Event> eventById = eventRepository.findById(id);
-        //Event event = eventById.orElseGet(() -> new Event());  ; // jeżeli Optional będzię miał naprawde Eventa to zwróci Event, jak będzie null to zwrócili nowy pusty Event też
         return eventRepository.findById(id).orElse(new Event());
     }
 
@@ -43,7 +41,7 @@ public class EventService {
     }
 
     public void addExpenseToTotal(Long id, Double expense) {
-        Event event = getEventById(id);;
+        Event event = getEventById(id);
         double totalExpense = event.getTotalExpense() + expense;
         event.setTotalExpense(totalExpense);
         saveEvent(event);
