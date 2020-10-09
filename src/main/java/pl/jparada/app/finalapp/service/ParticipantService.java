@@ -40,10 +40,19 @@ public class ParticipantService {
     }
 
     public List<Participant> getAllParticipants() {
-        List<Participant> participants = new ArrayList<>();
-        for (Participant participant : participantRepository.findAll()) {
-            participants.add(participant);
+        return participantRepository.findAll();
+    }
+
+    public List<Participant> getPaymentParticipants(List<String> participantIds) {
+        ArrayList<Long> participantIdsLong = new ArrayList<>();
+        ArrayList<Participant> paymentParticipants = new ArrayList<>();
+        for (String s : participantIds) {
+            long participantId = Long.parseLong(s);
+            participantIdsLong.add(participantId);
         }
-        return participants;
+        for (Long id : participantIdsLong) {
+            paymentParticipants.add(getParticipantById(id));
+        }
+        return paymentParticipants;
     }
 }

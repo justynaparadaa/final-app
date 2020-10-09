@@ -13,6 +13,7 @@ import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
 import pl.jparada.app.finalapp.service.SettlementService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,17 +33,16 @@ public class SettlementController {
     public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId) {
 
         Event event = eventService.getEventById(eventId);
-
-        List<Settlement> eventSettlements = event.getSettlement();
-        if (!eventSettlements.isEmpty()) {
-            settlementService.deletePreviousSettlement(eventSettlements);
-        }
-
         List<Participant> participants = event.getParticipants();
+        List<Settlement> previousSettlements = new ArrayList<>();
 
+        if(eventService.existSettlement(eventId)){
+            previousSettlements = event.getSettlement();
+        }
         List<Settlement> settlements = settlementService.makeAndSaveSettlement(participants);
         event.setSettlement(settlements);
         eventService.saveEvent(event);
+        settlementService.deleteSettlementsById(previousSettlements);
 
         return ResponseEntity.ok().body(settlements);
     }

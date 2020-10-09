@@ -6,4 +6,5 @@ import pl.jparada.app.finalapp.model.Event;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
+
 }

@@ -7,6 +7,7 @@ import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.Payment;
 import pl.jparada.app.finalapp.repository.EventRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -34,9 +35,9 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public void addSinglePayment(Long id, Payment paymentFromDb) {
+    public void addSinglePayment(Long id, Payment payment) {
         Event event = getEventById(id);
-        event.getPayment().add(paymentFromDb);
+        event.getPayment().add(payment);
         saveEvent(event);
     }
 
@@ -48,10 +49,16 @@ public class EventService {
     }
 
     public boolean existParticipant(Long id, Participant participant) {
-        Event event = getEventById(id);
-        return event.getParticipants()
+        return getEventById(id)
+                .getParticipants()
                 .stream()
-                .anyMatch(p -> p.getNameParticipant().equals(participant.getNameParticipant()));
+                .anyMatch(p -> p.getId().equals(participant.getId()));
+    }
+
+    public boolean existParticipant(Long id, List<Participant> participants) {
+        return getEventById(id)
+                .getParticipants()
+                .containsAll(participants);
     }
 
     public Participant getParticipant(Long id, Participant participant) {
@@ -63,4 +70,8 @@ public class EventService {
         return eventParticipant.orElse(new Participant());
     }
 
+    public boolean existSettlement(Long eventId) {
+        Event event = getEventById(eventId);
+        return !event.getSettlement().isEmpty() || event.getSettlement() != null;
+    }
 }
