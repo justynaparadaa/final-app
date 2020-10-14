@@ -3,21 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Szczegóły wydarzenia</title>
-    <link rel="stylesheet" th:href="@{../../static/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <h1 th:text="${event.nameEvent}"></h1>
 
-<br>
+<h4>UCZESTNICY</h4>
+
+<table>
+    <tr>
+        <th th:each="participant : ${participants}" th:text="*{participant.nameParticipant}"></th>
+    </tr>
+</table>
+
+<button><a th:href="@{${formUlrParticipant}}">Dodaj uczestnika</a></button>
+
 <br>
 <br>
 <br>
 
-<a th:href="@{${formUlrParticipant}}">Dodaj uczestnika</a>
-
-<br>
-<br>
+<h4>WYDATKI</h4>
 
 <table class="table">
     <thead>
@@ -32,40 +38,40 @@
 
     <form th:object="${payments}" th:each="payment : ${payments}">
         <tr>
-            <th th:text="${payment.owner.nameParticipant}"></th>
-            <th th:text="${payment.paymentDescription}"></th>
-            <th th:text="${payment.expense}"></th>
-            <th>[]</th>
-            <th th:each="participant : ${participants}">
+            <td th:text="${payment.owner.nameParticipant}"></td>
+            <td th:text="${payment.paymentDescription}"></td>
+            <td th:text="${payment.expense}"></td>
+            <td>[]</td>
+            <td th:each="participant : ${participants}">
                 <input type="checkbox" th:field="${participants}" th:value="${participant}"/>
-            </th>
+            </td>
         </tr>
     </form>
 
 
     <form th:action="@{${formUlrPayment}}" method="post" th:object="${payment}">
         <tr>
-            <th>
+            <td>
                 <select th:field="*{owner}">
                     <option type="text" th:value="Wybierz">Wybierz</option>
                     <option th:each="participant : ${participants}" th:text="${participant.nameParticipant}"
                             th:value="${participant.id}"></option>
                 </select>
-            </th>
-            <th>
+            </td>
+            <td>
                 <input type="text" name="typeDescription" th:field="*{paymentDescription}">
-            </th>
-            <th>
+            </td>
+            <td>
                 <input type=number name="typeAmount" th:field="*{expense}">
-            </th>
-            <th>
+            </td>
+            <td>
                 <input type="checkbox" th:value="${participants}">
-            </th>
-            <th th:each="participant : ${participants}">
-                <input type="checkbox" th:field="*{participantList}" th:value="${participant.id}"></th>
-            <th>
+            </td>
+            <td th:each="participant : ${participants}">
+                <input type="checkbox" th:field="*{participantList}" th:value="${participant.id}"></td>
+            <td>
                 <button type="submit" value="Dodaj">Dodaj</button>
-            </th>
+            </td>
         </tr>
     </form>
 

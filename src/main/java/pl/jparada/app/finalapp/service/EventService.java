@@ -35,7 +35,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public void addSinglePayment(Long id, Payment payment) {
+    public void addPayment(Long id, Payment payment) {
         Event event = getEventById(id);
         event.getPayment().add(payment);
         saveEvent(event);

@@ -30,15 +30,15 @@ public class ParticipantController {
         return "participant/create-participant";
     }
 
-    @PostMapping("/{id}/participants")
+    @PostMapping("/{event_id}/participants")
     public String saveParticipant(@Valid @ModelAttribute("participant") Participant participant,
-                                  @PathVariable(value = "id") Long eventId,
+                                  @PathVariable(value = "event_id") Long eventId,
                                   Model model) {
         model.addAttribute("participant", participant);
-        //TODO how avoid the line below
+        //TODO how correct the line below
         participant.setId(null);
 
-        if (!eventService.existParticipant(eventId, participant)) {
+        if (!eventService.existParticipant(eventId, participant) && participant.getNameParticipant() != null) {
             participantService.saveParticipant(participant);
             eventService.addParticipant(eventId, participant);
         }

@@ -21,7 +21,7 @@ public class ParticipantRestController {
     @PutMapping("/{id}/participants")
     public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant, @PathVariable(value = "id") Long eventId){
 
-        if(!eventService.existParticipant(eventId, participant)) {
+        if(!eventService.existParticipant(eventId, participant) && participant.getNameParticipant() != null) {
             participantService.saveParticipant(participant);
             eventService.addParticipant(eventId, participant);
         } else {

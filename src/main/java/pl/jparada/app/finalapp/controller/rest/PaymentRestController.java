@@ -38,7 +38,7 @@ public class PaymentRestController {
             paymentService.savePayment(payment);
 
             Double expense = payment.getExpense();
-            eventService.addSinglePayment(eventId, payment);
+            eventService.addPayment(eventId, payment);
             eventService.addExpenseToTotal(eventId, expense);
 
             participantService.addAmountPaid(ownerId, expense);
