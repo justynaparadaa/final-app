@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Utworzone wydarzenie</title>
+</head>
+<body>
+
+<H1>Wydarzenie zostało utworzone!</H1>
+<br>
+<br>
+
+Nazwa wydarzania: <a th:href="@{${formUlr}}"><span th:text="${event.nameEvent}"></span></a>
+<br>
+
+<p><a th:href="@{/api/v2/name-event}">Utwórz inne wydarzenie</a></p>
+
+</body>
+</html>

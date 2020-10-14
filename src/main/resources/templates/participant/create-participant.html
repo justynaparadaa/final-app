@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+</head>
+<body>
+
+<H1 th:text="*{event.nameEvent}"></H1>
+
+<br>
+
+<p>Proszę wpisać uczestnika wydarzenia, a następnie naciśnąć ENTER!</p>
+<form th:action="@{${formUlr}}" method="post" th:object="${participant}">
+    <input type="text" th:field="*{nameParticipant}"><br>
+</form>
+
+</body>
+</html>

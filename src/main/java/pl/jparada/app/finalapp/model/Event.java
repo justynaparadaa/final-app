@@ -19,7 +19,7 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameEvent;
+        private String nameEvent;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")

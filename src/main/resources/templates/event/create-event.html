@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+
+<H1>Witaj w Aplikacji do rozlicznia wydarzeń grupowych!</H1>
+
+<br>
+
+<p>Proszę wpisać nazwę wydarzenia, a następnie naciśnąc ENTER!</p>
+<form th:action="@{/api/v2/save-event}" method="post" th:object="${event}">
+    Nazwa wydarzania: <input type="text"
+                 th:field="*{nameEvent}"><br>
+</form>
+
+</body>
+</html>

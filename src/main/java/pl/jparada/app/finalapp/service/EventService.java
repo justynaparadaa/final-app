@@ -52,7 +52,7 @@ public class EventService {
         return getEventById(id)
                 .getParticipants()
                 .stream()
-                .anyMatch(p -> p.getId().equals(participant.getId()));
+                .anyMatch(p -> p.getNameParticipant().equals(participant.getNameParticipant()));
     }
 
     public boolean existParticipant(Long id, List<Participant> participants) {

@@ -1,4 +1,4 @@
-package pl.jparada.app.finalapp.controller;
+package pl.jparada.app.finalapp.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

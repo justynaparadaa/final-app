@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Szczegóły wydarzenia</title>
+    <link rel="stylesheet" th:href="@{../../static/css/style.css}">
+</head>
+<body>
+
+<h1 th:text="${event.nameEvent}"></h1>
+
+<br>
+<br>
+<br>
+<br>
+
+<a th:href="@{${formUlrParticipant}}">Dodaj uczestnika</a>
+
+<br>
+<br>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Płatnik</th>
+        <th>Opis</th>
+        <th>Kwota</th>
+        <th>Wszyscy</th>
+        <th th:each="participant : ${participants}" th:text="*{participant.nameParticipant}"></th>
+    </tr>
+    </thead>
+
+    <form th:object="${payments}" th:each="payment : ${payments}">
+        <tr>
+            <th th:text="${payment.owner.nameParticipant}"></th>
+            <th th:text="${payment.paymentDescription}"></th>
+            <th th:text="${payment.expense}"></th>
+            <th>[]</th>
+            <th th:each="participant : ${participants}">
+                <input type="checkbox" th:field="${participants}" th:value="${participant}"/>
+            </th>
+        </tr>
+    </form>
+
+
+    <form th:action="@{${formUlrPayment}}" method="post" th:object="${payment}">
+        <tr>
+            <th>
+                <select th:field="*{owner}">
+                    <option type="text" th:value="Wybierz">Wybierz</option>
+                    <option th:each="participant : ${participants}" th:text="${participant.nameParticipant}"
+                            th:value="${participant.id}"></option>
+                </select>
+            </th>
+            <th>
+                <input type="text" name="typeDescription" th:field="*{paymentDescription}">
+            </th>
+            <th>
+                <input type=number name="typeAmount" th:field="*{expense}">
+            </th>
+            <th>
+                <input type="checkbox" th:value="${participants}">
+            </th>
+            <th th:each="participant : ${participants}">
+                <input type="checkbox" th:field="*{participantList}" th:value="${participant.id}"></th>
+            <th>
+                <button type="submit" value="Dodaj">Dodaj</button>
+            </th>
+        </tr>
+    </form>
+
+</table>
+
+
+<p><a th:href="@{/api/v2/name-event}">Utwórz inne wydarzenie</a></p>
+
+
+</body>
+</html>

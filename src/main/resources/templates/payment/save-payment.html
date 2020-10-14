@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodanie wydatku</title>
+</head>
+<body>
+
+<H1 th:text="${event.nameEvent}"></H1>
+<br>
+<br>
+
+Gratulujemy <span th:text="${payment.owner}"></span>! Dodałaś/Dodałeś wydatek do wydarzenia "<span th:text="${event.nameEvent}"></span>"!
+<br>
+
+
+
+<p><a th:href="@{${formUlr}}">Wróć do wydarzenia</a></p>
+
+</body>
+</html>

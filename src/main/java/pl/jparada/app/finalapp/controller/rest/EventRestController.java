@@ -1,4 +1,4 @@
-package pl.jparada.app.finalapp.controller;
+package pl.jparada.app.finalapp.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import pl.jparada.app.finalapp.service.PaymentService;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
-public class EventController {
+public class EventRestController {
 
     @Autowired
     private EventService eventService;
