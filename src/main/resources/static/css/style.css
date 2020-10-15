@@ -20,7 +20,6 @@ tbody tr:nth-child(odd) {
 }
 
 .table {
-    width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 1%;
@@ -44,4 +43,12 @@ tbody tr:nth-child(odd) {
 
 h1{
     text-align: center;
+}
+
+.spanLeft {
+    text-align: left;
+}
+
+.spanRight {
+    text-align: right;
 }

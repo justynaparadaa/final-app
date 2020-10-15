@@ -20,8 +20,6 @@
 <button><a th:href="@{${formUlrParticipant}}">Dodaj uczestnika</a></button>
 
 <br>
-<br>
-<br>
 
 <h4>WYDATKI</h4>
 
@@ -36,39 +34,69 @@
     </tr>
     </thead>
 
-    <form th:object="${payments}" th:each="payment : ${payments}">
+    <div th:object="${payments}" th:each="payment : ${payments}">
         <tr>
             <td th:text="${payment.owner.nameParticipant}"></td>
             <td th:text="${payment.paymentDescription}"></td>
             <td th:text="${payment.expense}"></td>
-            <td>[]</td>
+            <td>
+                <label>
+                    <input type="checkbox" th:checked="${payment.participantList.containsAll(participants)}">
+                </label>
+            </td>
+            <!--            <td th:each="paymentParticipant : ${{payment.participantList}}">-->
+            <!--                <input type="checkbox" th:field="${paymentParticipant}" th:value="${paymentParticipant.id}"/>-->
+            <!--            </td>-->
             <td th:each="participant : ${participants}">
-                <input type="checkbox" th:field="${participants}" th:value="${participant}"/>
+                <label>
+                    <input type="checkbox" th:checked="${payment.participantList.contains(participant)}">
+                </label>
             </td>
         </tr>
-    </form>
+    </div>
 
 
     <form th:action="@{${formUlrPayment}}" method="post" th:object="${payment}">
         <tr>
             <td>
-                <select th:field="*{owner}">
-                    <option type="text" th:value="Wybierz">Wybierz</option>
-                    <option th:each="participant : ${participants}" th:text="${participant.nameParticipant}"
-                            th:value="${participant.id}"></option>
-                </select>
+                <label>
+                    <select th:field="*{owner}">
+                        <option th:type="text" th:value="Wybierz">Wybierz</option>
+                        <option th:each="participant : ${participants}" th:text="${participant.nameParticipant}"
+                                th:value="${participant.id}"></option>
+                    </select>
+                </label>
             </td>
             <td>
-                <input type="text" name="typeDescription" th:field="*{paymentDescription}">
+                <label>
+                    <input type="text" name="typeDescription" th:field="*{paymentDescription}">
+                </label>
             </td>
             <td>
-                <input type=number name="typeAmount" th:field="*{expense}">
+                <label>
+                    <input type=number name="typeAmount" th:field="*{expense}">
+                </label>
             </td>
+
+            <script language="JavaScript">
+                function toggle(source) {
+                checkboxes = document.getElementsByName('paymentParticipant');
+                for(var i=0, n=checkboxes.length;i<n;i++) {
+                    checkboxes[i].checked = source.checked;}
+                }
+            </script>
+
             <td>
-                <input type="checkbox" th:value="${participants}">
+                <label>
+                    <input type="checkbox" onclick="toggle(this)" name="paymentParticipant" th:field="*{participantList}" th:value="${participants}">
+                </label>
             </td>
+
             <td th:each="participant : ${participants}">
-                <input type="checkbox" th:field="*{participantList}" th:value="${participant.id}"></td>
+                <label>
+                    <input type="checkbox" name="paymentParticipant" th:field="*{participantList}" th:value="${participant.id}">
+                </label>
+            </td>
             <td>
                 <button type="submit" value="Dodaj">Dodaj</button>
             </td>
@@ -79,7 +107,6 @@
 
 
 <p><a th:href="@{/api/v2/name-event}">Utwórz inne wydarzenie</a></p>
-
 
 </body>
 </html>

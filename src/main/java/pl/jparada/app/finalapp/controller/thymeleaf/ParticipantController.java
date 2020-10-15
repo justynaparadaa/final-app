@@ -22,7 +22,7 @@ public class ParticipantController {
     private ParticipantService participantService;
 
     @GetMapping("/{event_id}/participants")
-    public String addParticipant(Model model, @PathVariable(value = "event_id") Long eventId) {
+    public String addParticipant(Model model, @PathVariable(name = "event_id") Long eventId) {
         Participant participant = Participant.builder().build();
         model.addAttribute("participant", participant);
         model.addAttribute("event", eventService.getEventById(eventId));
@@ -31,12 +31,10 @@ public class ParticipantController {
     }
 
     @PostMapping("/{event_id}/participants")
-    public String saveParticipant(@Valid @ModelAttribute("participant") Participant participant,
-                                  @PathVariable(value = "event_id") Long eventId,
-                                  Model model) {
+    public String saveParticipant(Model model,
+                                  @Valid @ModelAttribute("participant") Participant participant,
+                                  @PathVariable(value = "event_id") Long eventId) {
         model.addAttribute("participant", participant);
-        //TODO how correct the line below
-        participant.setId(null);
 
         if (!eventService.existParticipant(eventId, participant) && participant.getNameParticipant() != null) {
             participantService.saveParticipant(participant);
