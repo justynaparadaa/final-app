@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -26,19 +29,21 @@ public class Participant implements Serializable, Comparator<Participant> {
 
     private double totalAmountDue;
 
-    @Transient
     private double balance;
 
     public Participant(String nameParticipant) {
         this.nameParticipant = nameParticipant;
     }
 
+    //TODO refactor method? making it via service?!
     public void countBalance() {
-        balance = this.getTotalAmountPaid() - this.getTotalAmountDue();
+        long round = Math.round(((this.getTotalAmountPaid() - this.getTotalAmountDue()) * 100));
+        double balance = (double) round/100;
+        setBalance(balance);
     }
 
     @Override
     public int compare(Participant participant, Participant t1) {
-        return (int)(participant.getBalance() - t1.getBalance());
+        return (int) (participant.getBalance() - t1.getBalance());
     }
 }

@@ -44,7 +44,6 @@ public class PaymentRestController {
             participantService.addAmountPaid(ownerId, expense);
             paymentParticipants.forEach(participant -> participantService.addAmountDue(participant.getId(), expense / paymentParticipants.size()));
         } else {
-            //TODO the line below is correct?
             return ResponseEntity.status(HttpStatus.valueOf(" Participants do not belong to event!")).body(new Payment());
         }
         return ResponseEntity.ok().body(payment);

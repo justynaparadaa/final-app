@@ -45,10 +45,11 @@ h1{
     text-align: center;
 }
 
-.spanLeft {
-    text-align: left;
-}
-
-.spanRight {
-    text-align: right;
+.box{
+    margin:10px;
+    width:230px;
+    background-color: #cccccc;
+    float:left;
+    border: 1px solid #aaaaaa;
+    display: inline-block;
 }

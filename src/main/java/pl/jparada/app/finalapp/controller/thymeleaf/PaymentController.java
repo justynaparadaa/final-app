@@ -27,18 +27,15 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping("/{e_id}/payments")
-    public String addPayment(@Valid @ModelAttribute("payment") Payment payment,
-                             @PathVariable(value = "e_id") Long eventId,
-                             Model model) {
+    public String addPayment(Model model,
+                             @Valid @ModelAttribute("payment") Payment payment,
+                             @PathVariable(value = "e_id") Long eventId) {
 
         model.addAttribute("event", eventService.getEventById(eventId));
         model.addAttribute("payment", payment);
         model.addAttribute("event", eventService.getEventById(eventId));
         model.addAttribute("formUlr", "../" + eventId.toString());
 
-
-        //TODO how correct the line below
-        payment.setId(null);
         paymentService.savePayment(payment);
 
         Double expense = payment.getExpense();
@@ -48,6 +45,8 @@ public class PaymentController {
         List<Participant> paymentParticipants = payment.getParticipantList();
         participantService.addAmountPaid(payment.getOwner().getId(), expense);
         paymentParticipants.forEach(participant -> participantService.addAmountDue(participant.getId(), expense / paymentParticipants.size()));
+        paymentParticipants.forEach(Participant::countBalance);
+        paymentParticipants.forEach(participant -> participantService.saveParticipant(participant));
 
         return "payment/save-payment";
     }

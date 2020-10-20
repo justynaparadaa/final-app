@@ -11,9 +11,19 @@
 
 <h4>UCZESTNICY</h4>
 
-<table>
+<table class="table">
+    <thead>
     <tr>
         <th th:each="participant : ${participants}" th:text="*{participant.nameParticipant}"></th>
+    </tr>
+    </thead>
+    <tr>
+        <td th:each="participant : ${participants}" th:text="*{participant.balance}"></td>
+    </tr>
+    <tr>
+        <td th:each="participant : ${participants}">
+            <a th:href="@{${formUlrParticipant} + '/' + ${participant.id} + '/delete'}" th:text="usuń"></a> /
+            <a th:href="@{${formUlrParticipant} + '/' + ${participant.id}}" th:text="edytuj"></a></td>
     </tr>
 </table>
 
@@ -80,21 +90,24 @@
 
             <script language="JavaScript">
                 function toggle(source) {
-                checkboxes = document.getElementsByName('paymentParticipant');
-                for(var i=0, n=checkboxes.length;i<n;i++) {
-                    checkboxes[i].checked = source.checked;}
+                    checkboxes = document.getElementsByName('paymentParticipant');
+                    for (var i = 0, n = checkboxes.length; i < n; i++) {
+                        checkboxes[i].checked = source.checked;
+                    }
                 }
             </script>
 
             <td>
                 <label>
-                    <input type="checkbox" onclick="toggle(this)" name="paymentParticipant" th:field="*{participantList}" th:value="${participants}">
+                    <input type="checkbox" onclick="toggle(this)" name="paymentParticipant"
+                           th:field="*{participantList}" th:value="${participants}">
                 </label>
             </td>
 
             <td th:each="participant : ${participants}">
                 <label>
-                    <input type="checkbox" name="paymentParticipant" th:field="*{participantList}" th:value="${participant.id}">
+                    <input type="checkbox" name="paymentParticipant" th:field="*{participantList}"
+                           th:value="${participant.id}">
                 </label>
             </td>
             <td>

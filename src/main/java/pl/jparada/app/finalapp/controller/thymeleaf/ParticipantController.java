@@ -46,4 +46,16 @@ public class ParticipantController {
 
         return "participant/save-participant";
     }
+
+    //TODO
+    @GetMapping("/{event_id}/participants/{part_Id}/delete")
+    public String deleteParticipant(Model model,
+                                    @PathVariable(value = "event_id") Long eventId,
+                                    @PathVariable(value = "event_id") Long partId) {
+
+        participantService.delete(partId);
+        model.addAttribute("formUlr", "../" + eventId.toString());
+        return "participant/delete-participant";
+    }
+
 }

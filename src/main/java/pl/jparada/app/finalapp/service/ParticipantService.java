@@ -55,4 +55,11 @@ public class ParticipantService {
         }
         return paymentParticipants;
     }
+
+    public void delete(Long partId) {
+        Participant participant = participantRepository.getOne(partId);
+        if (participant.getTotalAmountPaid() == 0 && participant.getTotalAmountDue() == 0) {
+            participantRepository.deleteById(partId);
+        }
+    }
 }

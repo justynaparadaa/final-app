@@ -47,6 +47,7 @@ public class EventController {
         Event event = eventService.getEventById(id);
         Payment payment = Payment.builder().build();
 
+
         model.addAttribute("event", event);
         model.addAttribute("participants", event.getParticipants());
         model.addAttribute("payments", event.getPayment());
