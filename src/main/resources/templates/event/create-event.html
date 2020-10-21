@@ -13,8 +13,10 @@
 
 <p>Proszę wpisać nazwę wydarzenia, a następnie naciśnąc ENTER!</p>
 <form th:action="@{/api/v2/save-event}" method="post" th:object="${event}">
-    Nazwa wydarzania: <input type="text"
-                 th:field="*{nameEvent}"><br>
+    Nazwa wydarzania: <label>
+    <input type="text"
+                 th:field="*{nameEvent}">
+</label><br>
 </form>
 
 </body>

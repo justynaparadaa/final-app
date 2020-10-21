@@ -14,13 +14,16 @@
 <table class="table">
     <thead>
     <tr>
+        <th>Nick</th>
         <th th:each="participant : ${participants}" th:text="*{participant.nameParticipant}"></th>
     </tr>
     </thead>
     <tr>
+        <td style="font-weight: bold">Bilans</td>
         <td th:each="participant : ${participants}" th:text="*{participant.balance}"></td>
     </tr>
     <tr>
+        <td style="font-weight: bold">Usuń uczestnika / edytuj nick</td>
         <td th:each="participant : ${participants}">
             <a th:href="@{${formUlrParticipant} + '/' + ${participant.id} + '/delete'}" th:text="usuń"></a> /
             <a th:href="@{${formUlrParticipant} + '/' + ${participant.id}}" th:text="edytuj"></a></td>

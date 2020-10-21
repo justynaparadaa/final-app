@@ -47,7 +47,7 @@ public class ParticipantController {
         return "participant/save-participant";
     }
 
-    //TODO
+    //TODO how to delete participant?
     @GetMapping("/{event_id}/participants/{part_Id}/delete")
     public String deleteParticipant(Model model,
                                     @PathVariable(value = "event_id") Long eventId,
@@ -57,5 +57,33 @@ public class ParticipantController {
         model.addAttribute("formUlr", "../" + eventId.toString());
         return "participant/delete-participant";
     }
+
+    @GetMapping("/{event_id}/participants/{part_id}")
+    public String getParticipantToEdit(Model model,
+                                       @PathVariable(value = "event_id") Long eventId,
+                                       @PathVariable(value = "part_id") Long partId) {
+
+        Participant participant = participantService.getParticipantById(partId);
+        model.addAttribute("participant", participant);
+        model.addAttribute("participantName", participant.getNameParticipant());
+        model.addAttribute("event", eventService.getEventById(eventId));
+
+        return "participant/edit-participant";
+    }
+
+    @PostMapping("/{event_id}/participants/{part_id}")
+    public String editParticipantName(Model model,
+                                  @PathVariable(value = "event_id") Long eventId,
+                                  @PathVariable(value = "part_id") Long partId,
+                                  @Valid @ModelAttribute("participant") Participant participant) {
+
+        Participant participantFrDB = participantService.getParticipantById(partId);
+        participantFrDB.setNameParticipant(participant.getNameParticipant());
+        participantService.saveParticipant(participantFrDB);
+
+        //TODO more about redirect want to know
+        return "redirect:../../{event_id}";
+    }
+
 
 }
