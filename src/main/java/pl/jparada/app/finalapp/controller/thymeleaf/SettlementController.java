@@ -1,10 +1,9 @@
-package pl.jparada.app.finalapp.controller.rest;
+package pl.jparada.app.finalapp.controller.thymeleaf;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
@@ -29,21 +28,21 @@ public class SettlementController {
     @Autowired
     private ParticipantService participantService;
 
-    @PostMapping("{id}/settlement")
-    public ResponseEntity<List<Settlement>> makeSettlement(@PathVariable(value = "id") Long eventId) {
+    @GetMapping("/{event_id}/settlements")
+    public String makeReconciliation (@PathVariable(value = "event_id") Long eventId) {
 
         Event event = eventService.getEventById(eventId);
         List<Participant> participants = event.getParticipants();
         List<Settlement> previousSettlements = new ArrayList<>();
 
         if(eventService.existSettlement(eventId)){
-            previousSettlements = event.getSettlement();
+            previousSettlements = event.getSettlements();
         }
         List<Settlement> settlements = settlementService.makeAndSaveSettlement(participants);
-        event.setSettlement(settlements);
+        event.setSettlements(settlements);
         eventService.saveEvent(event);
         settlementService.deleteSettlementsById(previousSettlements);
 
-        return ResponseEntity.ok().body(settlements);
+        return "participant/save-participant";
     }
 }

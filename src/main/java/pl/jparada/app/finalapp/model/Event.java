@@ -31,7 +31,7 @@ public class Event implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id")
-    private List<Settlement> settlement;
+    private List<Settlement> settlements;
 
     private double totalExpense;
 
@@ -43,6 +43,5 @@ public class Event implements Serializable {
         this.nameEvent = nameEvent;
         this.participants = participants;
     }
-
 
 }

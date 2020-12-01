@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Szczegóły wydarzenia</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
 
+<p><a th:href="@{/api/v2/name-event}">Utwórz inne wydarzenie</a></p>
+
 <h1 th:text="${event.nameEvent}"></h1>
+
 
 <h4>UCZESTNICY</h4>
 
-<table class="table">
+<table class="table table-bordered table-hover">
     <thead>
     <tr>
         <th>Nick</th>
@@ -25,7 +35,9 @@
     <tr>
         <td style="font-weight: bold">Usuń uczestnika / edytuj nick</td>
         <td th:each="participant : ${participants}">
-            <a th:href="@{${formUlrParticipant} + '/' + ${participant.id} + '/delete'}" th:text="usuń"></a> /
+            <a methods="get" th:href="@{${formUlrParticipant} + '/' + ${participant.id} + '/delete'}"
+               th:text="usuń"></a>
+            /
             <a th:href="@{${formUlrParticipant} + '/' + ${participant.id}}" th:text="edytuj"></a></td>
     </tr>
 </table>
@@ -36,7 +48,7 @@
 
 <h4>WYDATKI</h4>
 
-<table class="table">
+<table class="table table-bordered table-hover">
     <thead>
     <tr>
         <th>Płatnik</th>
@@ -57,9 +69,6 @@
                     <input type="checkbox" th:checked="${payment.participantList.containsAll(participants)}">
                 </label>
             </td>
-            <!--            <td th:each="paymentParticipant : ${{payment.participantList}}">-->
-            <!--                <input type="checkbox" th:field="${paymentParticipant}" th:value="${paymentParticipant.id}"/>-->
-            <!--            </td>-->
             <td th:each="participant : ${participants}">
                 <label>
                     <input type="checkbox" th:checked="${payment.participantList.contains(participant)}">
@@ -93,36 +102,60 @@
 
             <script language="JavaScript">
                 function toggle(source) {
-                    checkboxes = document.getElementsByName('paymentParticipant');
+                    console.log("source", source);
+                    checkboxes = document.getElementsByClassName('paymentParticipant');
+
                     for (var i = 0, n = checkboxes.length; i < n; i++) {
+                        console.log("pierwszy", checkboxes[i]);
                         checkboxes[i].checked = source.checked;
+                        console.log(checkboxes[i]);
                     }
                 }
             </script>
 
             <td>
                 <label>
-                    <input type="checkbox" onclick="toggle(this)" name="paymentParticipant"
-                           th:field="*{participantList}" th:value="${participants}">
+                    <input type="checkbox" onclick="toggle(this)">
                 </label>
             </td>
 
             <td th:each="participant : ${participants}">
                 <label>
-                    <input type="checkbox" name="paymentParticipant" th:field="*{participantList}"
+                    <input type="checkbox" th:field="*{participantList}" class="paymentParticipant"
                            th:value="${participant.id}">
                 </label>
             </td>
             <td>
-                <button type="submit" value="Dodaj">Dodaj</button>
+                <button class="btn btn-danger" type="submit" value="Dodaj">Dodaj</button>
             </td>
         </tr>
     </form>
 
 </table>
 
+<button><a th:href="@{${formUlrParticipant}}">Rozlicz</a></button>
 
-<p><a th:href="@{/api/v2/name-event}">Utwórz inne wydarzenie</a></p>
+<h4>ROZLICZENIE</h4>
+
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>KTO</th>
+        <th>ILE</th>
+        <th>KOMU</th>
+    </tr>
+
+    <div th:object="${settlements}" th:each="settlement : ${settlements}">
+        <tr>
+            <td th:text="${settlement.lender}"></td>
+            <td th:text="${settlement.amount}"></td>
+            <td th:text="${settlement.debtor}"></td>
+        </tr>
+    </div>
+
+    </thead>
+</table>
+
 
 </body>
 </html>

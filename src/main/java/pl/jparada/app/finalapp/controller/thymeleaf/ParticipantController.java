@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.jparada.app.finalapp.model.Event;
 import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.service.EventService;
 import pl.jparada.app.finalapp.service.ParticipantService;
+import pl.jparada.app.finalapp.service.PaymentService;
 
 import javax.validation.Valid;
 
@@ -20,6 +22,9 @@ public class ParticipantController {
 
     @Autowired
     private ParticipantService participantService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping("/{event_id}/participants")
     public String addParticipant(Model model, @PathVariable(name = "event_id") Long eventId) {
@@ -47,16 +52,6 @@ public class ParticipantController {
         return "participant/save-participant";
     }
 
-    //TODO how to delete participant?
-    @GetMapping("/{event_id}/participants/{part_Id}/delete")
-    public String deleteParticipant(Model model,
-                                    @PathVariable(value = "event_id") Long eventId,
-                                    @PathVariable(value = "event_id") Long partId) {
-
-        participantService.delete(partId);
-        model.addAttribute("formUlr", "../" + eventId.toString());
-        return "participant/delete-participant";
-    }
 
     @GetMapping("/{event_id}/participants/{part_id}")
     public String getParticipantToEdit(Model model,
@@ -73,16 +68,35 @@ public class ParticipantController {
 
     @PostMapping("/{event_id}/participants/{part_id}")
     public String editParticipantName(Model model,
-                                  @PathVariable(value = "event_id") Long eventId,
-                                  @PathVariable(value = "part_id") Long partId,
-                                  @Valid @ModelAttribute("participant") Participant participant) {
+                                      @PathVariable(value = "event_id") Long eventId,
+                                      @PathVariable(value = "part_id") Long partId,
+                                      @Valid @ModelAttribute("participant") Participant participant) {
 
         Participant participantFrDB = participantService.getParticipantById(partId);
         participantFrDB.setNameParticipant(participant.getNameParticipant());
         participantService.saveParticipant(participantFrDB);
 
-        //TODO more about redirect want to know
         return "redirect:../../{event_id}";
+    }
+
+    @GetMapping("/{even" +
+            "t_id}/participants/{part_id}/delete")
+    public String deleteParticipantIfNotInvolvedInReconciliation(Model model,
+                                                                 @PathVariable(value = "event_id") Long eventId,
+                                                                 @PathVariable(value = "part_id") Long partId) {
+
+        Event event = eventService.getEventById(eventId);
+        Participant participant = participantService.getParticipantById(partId);
+        model.addAttribute("formUlr", "../../../" + event.getId());
+
+        if (!paymentService.existsParticipant(event, participant)) {
+            participant.setDeleted(true);
+            participantService.saveParticipant(participant);
+            eventService.saveEventAfterRemovingParticipant(eventId);
+            participantService.delete(partId);
+            return "redirect:../../../{event_id}";
+        } else
+            return "participant/delete-participant";
     }
 
 

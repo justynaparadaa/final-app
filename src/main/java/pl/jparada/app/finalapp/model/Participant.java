@@ -31,6 +31,8 @@ public class Participant implements Serializable, Comparator<Participant> {
 
     private double balance;
 
+    private boolean deleted;
+
     public Participant(String nameParticipant) {
         this.nameParticipant = nameParticipant;
     }

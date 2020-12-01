@@ -8,7 +8,9 @@ import pl.jparada.app.finalapp.model.Payment;
 import pl.jparada.app.finalapp.repository.EventRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,6 +25,19 @@ public class EventService {
 
     public Event getEventById(Long id) {
         return eventRepository.findById(id).orElse(new Event());
+    }
+
+    public void saveEventAfterRemovingParticipant(Long id) {
+        Event event = eventRepository.findById(id).orElse(new Event());
+        List<Participant> notDeletedParticipants = event
+                .getParticipants()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(participant -> !participant.isDeleted())
+                .collect(Collectors.toList());
+
+        event.setParticipants(notDeletedParticipants);
+        saveEvent(event);
     }
 
     public void deleteEvent(Long id) {
@@ -72,6 +87,6 @@ public class EventService {
 
     public boolean existSettlement(Long eventId) {
         Event event = getEventById(eventId);
-        return !event.getSettlement().isEmpty() || event.getSettlement() != null;
+        return !event.getSettlements().isEmpty() || event.getSettlements() != null;
     }
 }

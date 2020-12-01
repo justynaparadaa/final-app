@@ -48,6 +48,6 @@ public class PaymentController {
         paymentParticipants.forEach(Participant::countBalance);
         paymentParticipants.forEach(participant -> participantService.saveParticipant(participant));
 
-        return "payment/save-payment";
+        return "redirect:../{e_id}";
     }
 }

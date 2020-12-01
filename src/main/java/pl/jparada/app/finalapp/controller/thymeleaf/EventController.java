@@ -52,6 +52,7 @@ public class EventController {
         model.addAttribute("participants", event.getParticipants());
         model.addAttribute("payments", event.getPayment());
         model.addAttribute("payment", payment);
+        model.addAttribute("settlements", event.getSettlements());
 
         StringBuilder stringBuilderParticipant = new StringBuilder();
         String formUrlForParticipant = stringBuilderParticipant
@@ -64,6 +65,13 @@ public class EventController {
                 .append(event.getId().toString())
                 .append("/payments").toString();
         model.addAttribute("formUlrPayment", formUrlForPayment);
+
+        StringBuilder stringBuilderSettlement = new StringBuilder();
+        String formUrlForSettlement = stringBuilderSettlement
+                .append(event.getId().toString())
+                .append("/settlements").toString();
+        model.addAttribute("formUlrParticipant", formUrlForSettlement);
+
         return "event/show-event";
     }
 

@@ -2,6 +2,8 @@ package pl.jparada.app.finalapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.jparada.app.finalapp.model.Event;
+import pl.jparada.app.finalapp.model.Participant;
 import pl.jparada.app.finalapp.model.Payment;
 import pl.jparada.app.finalapp.repository.PaymentRepository;
 
@@ -15,4 +17,8 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
+    public boolean existsParticipant(Event event, Participant participant) {
+        return event.getPayment().stream()
+                .anyMatch(payment -> payment.getParticipantList().contains(participant) || payment.getOwner().equals(participant));
+    }
 }

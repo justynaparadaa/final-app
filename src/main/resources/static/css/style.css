@@ -34,10 +34,12 @@
 }
 
 h1{
-    text-align: center;
+    text-align: left;
 }
 
 .specialColumn{
     font-weight: bold;
     text-align: center;
 }
+
+
